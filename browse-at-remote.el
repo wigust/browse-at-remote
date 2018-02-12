@@ -46,6 +46,7 @@
     ("github.com" . "github")
     ("gitlab.com" . "gitlab")
     ("git.savannah.gnu.org" . "gnu"))
+    ("notabug.org" . "notabug"))
   "Alist of domain patterns to remote types."
 
   :type '(alist :key-type (string :tag "Domain")
@@ -217,6 +218,17 @@ If HEAD is detached, return nil."
 (defun browse-at-remote--format-commit-url-as-gnu (repo-url commithash)
   "Commit URL formatted for gnu"
   (format "%s.git/commit/?id=%s" (browse-at-remote-gnu-format-url repo-url) commithash))
+
+(defun browse-at-remote--format-region-url-as-notabug (repo-url location filename &optional linestart lineend)
+  "URL formatter for notabug."
+  (cond
+   (linestart (format "%s/src/%s/%s#L%d" repo-url location filename linestart))
+   (t (format "%s/src/%s/%s" repo-url location filename))))
+
+;; TODO: notabug.org cannot recognize 7 legnth sha1 commit.
+(defun browse-at-remote--format-commit-url-as-notabug (repo-url commithash)
+  "Commit URL formatted for notabug"
+  (format "%s.git/commit/%s" repo-url commithash))
 
 (defun browse-at-remote--format-region-url-as-github (repo-url location filename &optional linestart lineend)
   "URL formatted for github."
